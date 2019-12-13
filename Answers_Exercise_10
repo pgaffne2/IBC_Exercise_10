@@ -1,0 +1,31 @@
+K <- 1000000
+rN <- .1
+rM <- .1
+N0 <- 99
+M0 <- 1
+timesteps <- 1000
+N <- numeric(length=timesteps)
+M <- numeric(length=timesteps)
+N[1] <- N0
+M[1] <- M0
+for (i in 1:timesteps){
+  #drug treatment once growth rate reaches equilibrium 
+  if (i == 250){
+     rN <- -.1
+     rM <- .05
+   }
+  N[i+1] <- N[i] + rN*N[i] * (1-(N[i]+M[i])/K)
+  M[i+1] <- M[i] + rM*M[i] * (1-(N[i]+M[i])/K)
+}
+
+#create plot
+library(ggplot2)
+sim <- data.frame(time=1:length(N),C=N)
+sim2 <- data.frame(time=1:length(N),C=M)
+
+p = ggplot() + 
+  geom_line(data = sim, aes(x = time, y = C), color = "blue") +
+  geom_line(data = sim2, aes(x = time, y = C), color = "red") +
+  xlab('Year') +
+  ylab('Cells')
+
